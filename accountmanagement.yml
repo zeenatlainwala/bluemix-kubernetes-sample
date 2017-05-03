@@ -1,0 +1,178 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: accountmanagement
+  namespace: accountmanagement
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: accountmanagement
+    spec:
+      containers:
+      - name: accountmanagement
+        image: registry.ng.bluemix.net/influxdb/am:v3
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_URL
+          value: "account-management.cloudant.com"
+        - name: PORT
+          value: "8080"
+        - name: ACE_REGISTRATION_HOST
+          value: console.ng.bluemix.net
+        - name: API_HOST_NAME
+          value: api.ng.bluemix.net
+        - name: DEBUG
+          value: bluemix-bss*
+        - name: DEPLOYMENT
+          value: DEVELOPMENT
+        - name: DEPLOY_REGION
+          value: US
+        - name: FEDERATION_ENABLED
+          value: "false"
+        - name: MCCP_HOST_NAME
+          value: mccp.ng.bluemix.net
+        - name: REGION
+          value: us-south
+        - name: REGIONENABLED
+          value: "false"
+        - name: amHost
+          value: "localhost:3001"
+        - name: bssHost
+          value: ibmbss-account-management.ng.bluemix.net
+        - name: OBJ_STORAGE_URL
+          value: "https://dal05.objectstorage.softlayer.net"
+        - name: HYPERWARP_API
+          value: "http://localhost:8000/v1/posttosegment"
+        - name: HYPERWARP_ENABLED
+          value: "false"
+        - name: ENVIRONMENT_TYPE
+          value: public
+        - name: BMX_OAUTH_ALGO
+          value: HS256
+        - name: IAM_HOST
+          value: iam.stage1.ng.bluemix.net
+        - name: IAM_OIDC_TOKEN_PATH
+          value: /oidc/token
+        - name: IDAAS_DOMAIN
+          value: "https://idaas.iam.ibm.com"
+        - name: IDAAS_TIMEOUT
+          value: "5000"
+        - name: IDAAS_TIMEOUT_ENABLED
+          value: "false"
+        - name: UAA_CLIENT_ID
+          value: jtace
+        - name: UAA_CLIENT_SECRET
+          value: foobar
+        - name: SOFTLAYER_API_DOMAIN
+          value: "sandbox-api.integration.softlayer.com"
+        - name: SOFTLAYER_API_PREFIX
+          value: "/atlas/mobile/v3.1"
+        - name: IDENTITY_PROVIDER
+          value: IBMID
+        - name: TEAM_MEMBER_FEATURE_DISABLED
+          value: "false"
+        - name: IP_INTERVAL
+          value: "60000"
+        - name: IP_MAX_IN_INTERVAL
+          value: "1500"
+        - name: RATE_LIMITER_STEALTH_MODE
+          value: "true"
+        - name: AM_CACHE_NAMESPACE
+          value: AM-DEV
+        - name: POLICY_API_HOST
+          value: "iampap.stage1.ng.bluemix.net"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: dbuser
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: dbpass
+        - name: CLOUDOE_ADMIN
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: cloudoe_admin
+        - name: CLOUDOE_IBMBSS
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: cloudoe_ibmbss
+        - name: DELETED_DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: deleted_db_pass
+        - name: passphrase
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: passphrase
+        - name: salt
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: salt
+        - name: softlayer_brand_api_key
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: softlayer_brand_api_key
+        - name: softlayer_brand_username
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: softlayer_brand_username
+        - name: OBJ_STORAGE_USER
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: obj_storage_user
+        - name: OBJ_STORAGE_PASS
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: obj_storage_pass
+        - name: BMX_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: bmx_oauth_secret
+        - name: IAM_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: iam_client_id
+        - name: IAM_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: iam_client_secret
+        - name: SEGMENT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: segment_key
+        - name: IAM_POLICY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: iam_policy_api_key
+        - name: UAA_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: uaa_client_id
+        - name: UAA_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: am-secrets
+              key: uaa_client_secret
+      imagePullSecrets:
+      - name: registrypullsecret

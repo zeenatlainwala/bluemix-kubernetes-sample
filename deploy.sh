@@ -15,15 +15,15 @@ if [ $? -ne 0 ]; then
 fi
 eval "$exp"
 
-echo -e "Downloading guestbook yml"
-curl --silent "https://raw.githubusercontent.com/kubernetes/kubernetes/master/examples/guestbook/all-in-one/guestbook-all-in-one.yaml" > guestbook.yml
-sed -i '130i\ \ type: NodePort' guestbook.yml #For OSX: brew install gnu-sed; replace sed references with gsed
+#echo -e "Downloading guestbook yml"
+#curl --silent "https://raw.githubusercontent.com/kubernetes/kubernetes/master/examples/guestbook/all-in-one/guestbook-all-in-one.yaml" > guestbook.yml
+#sed -i '130i\ \ type: NodePort' guestbook.yml #For OSX: brew install gnu-sed; replace sed references with gsed
 
-echo -e "Deleting previous version of guestbook if it exists"
-kubectl delete --ignore-not-found=true   -f guestbook.yml
+#echo -e "Deleting previous version of guestbook if it exists"
+#kubectl delete --ignore-not-found=true   -f guestbook.yml
 
-echo -e "Creating pods"
-kubectl create -f guestbook.yml
+echo -e "Creating deployment"
+kubectl create -f am-secrets.yml,accountmanagement.yml,am-service.yml
 
 PORT=$(kubectl get services | grep frontend | sed 's/.*://g' | sed 's/\/.*//g')
 
